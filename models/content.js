@@ -7,7 +7,7 @@ var contentSchema = new Schema({
     name: { type: String, required: true },
     content: { type: String, required: false },
     language: { type: String, required: false },
-    deleted: { type: Boolean, default: true },
+    deleted: { type: Boolean, default: false },
     dateCreated: { type: Date, required: false},
     dateModified: { type: Date, required: false},
 });
