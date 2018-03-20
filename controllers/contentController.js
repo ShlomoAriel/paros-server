@@ -30,6 +30,17 @@ router.get('/api/getContents', passport.authenticate('jwt', { session: false }),
     })
 });
 //-------------------------------------------------------------------------------------------------
+router.post('/api/addContents', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+    console.log('adding contents')
+    ContentModel.insertMany(req.body,(err, contents) => {
+        if (err) {
+            return next(err.code)
+        }
+
+        res.json(contents)
+    })
+})
+//-------------------------------------------------------------------------------------------------
 router.post('/api/addContent', passport.authenticate('jwt', { session: false }), (req, res, next) => {
     console.log('adding content');
     var content = new ContentModel(req.body);
