@@ -91,5 +91,39 @@ router.delete('/api/deleteContent/:id', passport.authenticate('jwt', { session: 
             }
         });
 });
-
+//----------------------------------------------------------------------------------------------------
+router.put('/api/upsertContent/', passport.authenticate('jwt', { session: false }), function (req, res) {
+    console.log('upserting Content: ' + req.body.name + ' ' + req.body.content);
+    let id = req.body._id
+    if (!id) {
+        var content = new ContentModel(req.body);
+        content.save((err, newItem) => {
+        if (err) {
+            return next(err.code);
+        }
+        res.json(newItem);
+    });
+    } else{
+        ContentModel.findOneAndUpdate(
+            { _id: id},
+            { $set: {
+                    section: req.body.section,
+                    name: req.body.name,
+                    content: req.body.content,
+                    language: req.body.language,
+                    deleted: req.body.deleted
+                    dateModified: Date()
+                }
+            },
+            { upsert: true },
+            function (err, newContent) {
+                if (err) {
+                    res.send('Error upserting Content\n' + err);
+                }
+                else {
+                    res.json(newContent);
+                }
+            });
+    }
+});
 module.exports = router

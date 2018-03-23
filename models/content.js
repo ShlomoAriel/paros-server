@@ -6,7 +6,7 @@ var contentSchema = new Schema({
     section: { type: String, required: false },
     name: { type: String, required: true },
     content: { type: String, required: false },
-    language: { type: String, required: false },
+    language: { type: String, required: true },
     deleted: { type: Boolean, default: false },
     dateCreated: { type: Date, required: false},
     dateModified: { type: Date, required: false},
