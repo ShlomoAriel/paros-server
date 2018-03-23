@@ -111,7 +111,7 @@ router.put('/api/upsertContent/', passport.authenticate('jwt', { session: false 
                     name: req.body.name,
                     content: req.body.content,
                     language: req.body.language,
-                    deleted: req.body.deleted
+                    deleted: req.body.deleted,
                     dateModified: Date()
                 }
             },
