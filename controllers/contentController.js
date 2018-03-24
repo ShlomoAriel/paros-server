@@ -4,10 +4,6 @@ var express = require('express')
   , passport = require('passport')
   , app = express()
 
-// var contentUtils = require('../utils/contentUtils')
-// app.use(passport.initialize());
-// require('../config/passport')(passport);
-
 router.get('/api/getContent/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
     ContentModel.findOne({_id:req.params.id}).exec(function (err, content) {
         if (err) {
