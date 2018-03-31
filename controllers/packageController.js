@@ -88,14 +88,14 @@ router.delete('/api/deletePackage/:id', passport.authenticate('jwt', { session: 
         });
 });
 //----------------------------------------------------------------------------------------------------
-router.put('/api/upsertPackage/', passport.authenticate('jwt', { session: false }), function (req, res) {
-    console.log('upserting Package: ' + req.body.name + ' ' + req.body.package);
+router.put('/api/upsertPackage/', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    console.log('upserting Package: ' + req.body.name);
     let id = req.body._id
     if (!id) {
         var package = new PackageModel(req.body);
         package.save((err, newItem) => {
         if (err) {
-            return next(err.code);
+            return next(err);
         }
         res.json(newItem);
     });
