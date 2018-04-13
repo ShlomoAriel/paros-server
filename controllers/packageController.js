@@ -4,7 +4,7 @@ var express = require('express')
   , passport = require('passport')
   , app = express()
 
-router.get('/api/getPackage/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
+router.get('/api/getPackage/:id', function (req, res) {
     PackageModel.findOne({_id:req.params.id}).exec(function (err, package) {
         if (err) {
             res.send('find no good' + err)
@@ -15,7 +15,7 @@ router.get('/api/getPackage/:id', passport.authenticate('jwt', { session: false 
     })    
 });
 //-------------------------------------------------------------------------------------------------
-router.get('/api/getPackages', passport.authenticate('jwt', { session: false }), function (req, res) {
+router.get('/api/getPackages', function (req, res) {
     PackageModel.find().exec(function (err, packages) {
         if (err) {
             res.send('find no good' + err);
