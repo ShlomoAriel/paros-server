@@ -4,7 +4,7 @@ var express = require('express')
   , passport = require('passport')
   , app = express()
 
-router.get('/api/getContent/:id', { session: false }), function (req, res) {
+router.get('/api/getContent/:id', function (req, res) {
     ContentModel.findOne({_id:req.params.id}).exec(function (err, content) {
         if (err) {
             res.send('find no good' + err)
@@ -15,7 +15,7 @@ router.get('/api/getContent/:id', { session: false }), function (req, res) {
     })    
 });
 //-------------------------------------------------------------------------------------------------
-router.get('/api/getContents', { session: false }), function (req, res) {
+router.get('/api/getContents', function (req, res) {
     ContentModel.find().exec(function (err, contents) {
         if (err) {
             res.send('find no good' + err);
