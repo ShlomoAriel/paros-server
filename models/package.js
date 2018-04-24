@@ -8,6 +8,7 @@ var packageSchema = new Schema({
     image: { type: String, required: false },
     start: { type: Date, required: false },
     end: { type: Date, required: false },
+    language: { type: String, required: true },
     price: { type: String, required: false },
     accommodation: { type: String, required: false },
     meals: { type: String, required: false },

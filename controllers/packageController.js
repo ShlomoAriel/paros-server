@@ -18,7 +18,7 @@ router.get('/api/getPackage/:id', function (req, res) {
 router.get('/api/getPackages', function (req, res) {
     PackageModel.find().exec(function (err, packages) {
         if (err) {
-            res.send('find no good' + err);
+            res.send(err.code);
         }
         else {
             res.json(packages);
@@ -72,7 +72,7 @@ router.put('/api/updatePackage/:id', passport.authenticate('jwt', { session: fal
 });
 //----------------------------------------------------------------------------------------------------
 router.delete('/api/deletePackage/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
-    PackageModel.findById(req.params.id, function (err, newPackage) {
+    PackageModel.findById(req.params.id, function (err, package) {
             if (err) {
                 res.send('Error deleting Package\n' + err);
             }
@@ -108,6 +108,7 @@ router.put('/api/upsertPackage/', passport.authenticate('jwt', { session: false 
                     image: req.body.image,
                     start: req.body.start,
                     accommodation: req.body.accommodation,
+                    language: req.body.language,
                     meals: req.body.meals,
                     price: req.body.price,
                     end: req.body.end,
