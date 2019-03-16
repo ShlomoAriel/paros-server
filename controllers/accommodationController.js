@@ -1,46 +1,46 @@
 var express = require('express')
   , router = express.Router()
-  , PackageModel = require('../models/package')
+  , AccommodationModel = require('../models/accommodation')
   , passport = require('passport')
   , app = express()
 
-router.get('/api/getPackage/:id', function (req, res) {
-    PackageModel.findOne({_id:req.params.id}).exec(function (err, package) {
+router.get('/api/getAccommodation/:id', function (req, res) {
+    AccommodationModel.findOne({_id:req.params.id}).exec(function (err, accommodation) {
         if (err) {
             res.send('find no good' + err)
         }
         else {
-            res.json(package);
+            res.json(accommodation);
         }
     })    
 });
 //-------------------------------------------------------------------------------------------------
-router.get('/api/getPackages', function (req, res) {
-    PackageModel.find().exec(function (err, packages) {
+router.get('/api/getAccommodations', function (req, res) {
+    AccommodationModel.find().exec(function (err, accommodations) {
         if (err) {
             res.send(err.code);
         }
         else {
-            res.json(packages);
+            res.json(accommodations);
         }
     })
 });
 //-------------------------------------------------------------------------------------------------
-router.post('/api/addPackages', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-    console.log('adding packages')
-    PackageModel.insertMany(req.body,(err, packages) => {
+router.post('/api/addAccommodations', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+    console.log('adding accommodations')
+    AccommodationModel.insertMany(req.body,(err, accommodations) => {
         if (err) {
             return next(err.code)
         }
 
-        res.json(packages)
+        res.json(accommodations)
     })
 })
 //-------------------------------------------------------------------------------------------------
-router.post('/api/addPackage', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-    console.log('adding package');
-    var package = new PackageModel(req.body);
-    package.save((err, newItem) => {
+router.post('/api/addAccommodation', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+    console.log('adding accommodation');
+    var accommodation = new AccommodationModel(req.body);
+    accommodation.save((err, newItem) => {
         if (err) {
             return next(err.code);
         }
@@ -48,38 +48,38 @@ router.post('/api/addPackage', passport.authenticate('jwt', { session: false }),
     });
 });
 //----------------------------------------------------------------------------------------------------
-router.put('/api/updatePackage/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
-    console.log('updating Package: ' + req.body.name + ' ' + req.body.value);
-    PackageModel.findOneAndUpdate(
+router.put('/api/updateAccommodation/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
+    console.log('updating Accommodation: ' + req.body.name + ' ' + req.body.value);
+    AccommodationModel.findOneAndUpdate(
         { _id: req.params.id },
         { $set: { 
             section: req.body.section,
             name: req.body.name,
-            package: req.body.package,
+            accommodation: req.body.accommodation,
             deleted: req.body.deleted || false,
             dateModified: Date(),
         } 
         },
         { upsert: true },
-        function (err, package) {
+        function (err, accommodation) {
             if (err) {
-                res.send('Error updating Package\n' + err);
+                res.send('Error updating Accommodation\n' + err);
             }
             else {
-                res.json(package)
+                res.json(accommodation)
             }
         });
 });
 //----------------------------------------------------------------------------------------------------
-router.delete('/api/deletePackage/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
-    PackageModel.findById(req.params.id, function (err, package) {
+router.delete('/api/deleteAccommodation/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
+    AccommodationModel.findById(req.params.id, function (err, accommodation) {
             if (err) {
-                res.send('Error deleting Package\n' + err);
+                res.send('Error deleting Accommodation\n' + err);
             }
             else {
-                package.remove( (err, response) =>{
+                accommodation.remove( (err, response) =>{
                     if (err) {
-                        res.send('Error deleting package\n' + err);
+                        res.send('Error deleting accommodation\n' + err);
                     } else{
                         res.json(response)
                     }
@@ -88,41 +88,37 @@ router.delete('/api/deletePackage/:id', passport.authenticate('jwt', { session: 
         });
 });
 //----------------------------------------------------------------------------------------------------
-router.put('/api/upsertPackage/', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-    console.log('upserting Package: ' + req.body.name);
+router.put('/api/upsertAccommodation/', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    console.log('upserting Accommodation: ' + req.body.name);
     let id = req.body._id
     if (!id) {
-        var package = new PackageModel(req.body);
-        package.save((err, newItem) => {
+        var accommodation = new AccommodationModel(req.body);
+        accommodation.save((err, newItem) => {
         if (err) {
             return next(err);
         }
         res.json(newItem);
     });
     } else{
-        PackageModel.findOneAndUpdate(
+        AccommodationModel.findOneAndUpdate(
             { _id: id},
             { $set: {
                     description: req.body.description,
                     name: req.body.name,
+                    images: req.body.images,
                     image: req.body.image,
-                    start: req.body.start,
-                    accommodation: req.body.accommodation,
                     language: req.body.language,
-                    meals: req.body.meals,
-                    price: req.body.price,
-                    end: req.body.end,
                     deleted: req.body.deleted,
                     dateModified: Date()
                 }
             },
             { upsert: true, new: true  },
-            function (err, newPackage) {
+            function (err, newAccommodation) {
                 if (err) {
-                    res.send('Error upserting Package\n' + err);
+                    res.send('Error upserting Accommodation\n' + err);
                 }
                 else {
-                    res.json(newPackage);
+                    res.json(newAccommodation);
                 }
             });
     }
